@@ -17,7 +17,7 @@ function App() {
 
   const [debouncedTopic, setDebouncedTopic] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-
+ 
   const { data, isLoading, isError } = useQuery({
  
     queryKey: ['notes', debouncedTopic, currentPage],
