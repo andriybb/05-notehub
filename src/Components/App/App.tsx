@@ -1,15 +1,15 @@
 import { useState, useEffect} from "react";
 
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
-import NoteList from "../NoteList/NoteList";
+import NoteList from "../../components/NoteList/NoteList";
 import css from "./App.module.css";
 import { fetchNotes } from "../../services/noteService";
 import toast, {Toaster} from 'react-hot-toast';
-import SearchBox from "../SearchBox/SearchBox";
+import SearchBox from "../../components/SearchBox/SearchBox";
 import { useDebouncedCallback } from 'use-debounce';
-import Pagination from "../Pagination/Pagination";
+import Pagination from "../../components/Pagination/Pagination";
 
-import Modal from "../Modal/Modal";
+import Modal from "../../components/Modal/Modal";
 function App() {
 
   const [searchQuery, setSearchQuery] = useState("");

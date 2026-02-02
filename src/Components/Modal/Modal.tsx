@@ -3,8 +3,8 @@ import { useEffect } from 'react';
 
 
 import css from './Modal.module.css'
+import NoteForm from '../../components/NoteForm/NoteForm';
 
-import NoteForm from '../NoteForm/NoteForm';
 interface NoteModalProps {
   
   onClose: () => void;
