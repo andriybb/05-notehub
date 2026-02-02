@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect} from "react";
 
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import NoteList from "../NoteList/NoteList";
@@ -8,42 +8,47 @@ import toast, {Toaster} from 'react-hot-toast';
 import SearchBox from "../SearchBox/SearchBox";
 import { useDebouncedCallback } from 'use-debounce';
 import Pagination from "../Pagination/Pagination";
+
+import Modal from "../Modal/Modal";
 function App() {
-  const [searchQuery, setSearchQuery] = useState<string>("");
 
+  const [searchQuery, setSearchQuery] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-
-  const [topic, setTopic] = useState("");
+  const [debouncedTopic, setDebouncedTopic] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
+
   const { data, isLoading, isError } = useQuery({
-
-    queryKey: ["notes", topic, currentPage],
-    queryFn: () => fetchNotes(topic, currentPage),
-
+ 
+    queryKey: ['notes', debouncedTopic, currentPage],
+    queryFn: () => fetchNotes(debouncedTopic, currentPage),
     placeholderData: keepPreviousData,
   });
+
   useEffect(() => {
     if (isError) {
-      toast.error("Something went wrong. Please try again later.", {
-        position: "bottom-center",
-      });
+      toast.error("Error loading notes", { position: "bottom-right" });
     }
   }, [isError]);
-  const notes = data?. notes ?? [];
-  const totalPages = data?.totalPages ?? 0;
 
-  const debouncedFetch = useDebouncedCallback((query: string) => {
+ 
+  const updateSearch = useDebouncedCallback((value: string) => {
+    setDebouncedTopic(value);
+    setCurrentPage(1); 
+  }, 600);
 
-    fetch(`https://notehub-public.goit.study/api/notes?search=${query}`)
-      .then(res => res.json())
-      .then(data => setTopic(data))
-      .catch(err => console.error(err));
-  }, 500);
-  
   const handleSearchChange = (value: string) => {
     setSearchQuery(value); 
-    debouncedFetch(value); 
+    updateSearch(value);   
   };
+
+  const notes = data?.notes ?? [];
+  const totalPages = data?.totalPages ?? 0;
+
+  const handleOpenModal = () => setIsModalOpen(true);
+  const handleCloseModal = () => setIsModalOpen(false);
+
+  
   return (
     <>
        <Toaster />
@@ -62,16 +67,20 @@ function App() {
             setCurrentPage={setCurrentPage}
           />
         )}
-          <button className={css.button}>Create note +</button>
+          <button className={css.button} onClick={handleOpenModal}>Create note +</button>
         </header>
       
-      {notes && notes.length > 0 && <NoteList notes={notes} />}
-    {isError && toast.error("Error loading notes", {
-        position: "bottom-left",
-      })}
-        {isLoading && toast.loading("Loading notes...", {
-        position: "bottom-right",
-      })}</div>
+        <main className={css.mainContent}>
+          {isLoading && <p className={css.loading}>Loading notes...</p>}
+          
+          {!isLoading && notes.length > 0 && <NoteList notes={notes} />}
+          
+          {!isLoading && notes.length === 0 && (
+            <p className={css.empty}>No notes found for "{debouncedTopic}"</p>
+          )}
+        </main>
+        {isModalOpen && <Modal onClose={handleCloseModal} />}
+        </div>
       </>
   );
 }

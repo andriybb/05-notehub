@@ -11,7 +11,7 @@ interface CreateNoteResponse {
     title: string;}
 
     interface DeleteNoteResponse {
-        message: string;
+        id: string;
     }
 export async function fetchNotes(search: string, page: number): Promise<NoteResponse> {
     const response = await axios.get<NoteResponse>(
@@ -34,7 +34,7 @@ export async function fetchNotes(search: string, page: number): Promise<NoteResp
 
 export async function createNote(title: string, content: string, tag: string): Promise<CreateNoteResponse> {
     const response = await axios.post(
-        'https://notehub-public.goit.study/api/',
+        'https://notehub-public.goit.study/api/notes',
         {
             title,
             content,
@@ -51,8 +51,9 @@ export async function createNote(title: string, content: string, tag: string): P
 }
 
 export async function deleteNote(id: string): Promise<DeleteNoteResponse> {
+    console.log("Attempting to delete note with ID:", id);
     const response = await axios.delete(
-        `https://notehub-public.goit.study/api/${id}`,
+        `https://notehub-public.goit.study/api/notes/${id}`,
         {
             headers: {
                 Authorization: `Bearer ${import.meta.env.VITE_NOTEHUB_TOKEN}`,

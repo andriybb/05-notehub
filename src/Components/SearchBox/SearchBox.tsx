@@ -1,3 +1,4 @@
+
 import css from './SearchBox.module.css';
 
 interface SearchBoxProps {
@@ -7,6 +8,9 @@ interface SearchBoxProps {
 }
 
 function SearchBox({ onChange, value }: SearchBoxProps) {
+
+
+
   return (
     <>
       <input
