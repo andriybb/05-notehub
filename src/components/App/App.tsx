@@ -10,6 +10,7 @@ import { useDebouncedCallback } from 'use-debounce';
 import Pagination from "../../components/Pagination/Pagination";
 
 import Modal from "../../components/Modal/Modal";
+import NoteForm from "../NoteForm/NoteForm";
 function App() {
 
   const [searchQuery, setSearchQuery] = useState("");
@@ -79,7 +80,11 @@ function App() {
             <p className={css.empty}>No notes found for "{debouncedTopic}"</p>
           )}
         </main>
-        {isModalOpen && <Modal onClose={handleCloseModal} />}
+        {isModalOpen && (
+  <Modal onClose={handleCloseModal}>
+    <NoteForm onClose={handleCloseModal} />
+  </Modal>
+)}
         </div>
       </>
   );
