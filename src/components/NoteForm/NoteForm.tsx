@@ -32,6 +32,9 @@ export default function NoteForm({ onClose }: NoteFormProps) {
       queryClient.invalidateQueries({ queryKey: ['notes'] });
       onClose(); 
     },
+    onError: () => {
+      toast.error('Failed to create note');
+    }
   });
 
   return (

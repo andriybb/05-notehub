@@ -4,8 +4,6 @@ import type { Note } from '../types/note';
 interface NoteResponse {
     notes: Note[];
     totalPages: number;
-    currentPage: number; 
-  totalNotes: number;
 }
 
 export async function fetchNotes(search: string, page: number): Promise<NoteResponse> {
@@ -27,8 +25,8 @@ export async function fetchNotes(search: string, page: number): Promise<NoteResp
 
 
 
-export async function createNote(title: string, content: string, tag: string): Promise<NoteResponse> {
-    const response = await axios.post<NoteResponse>(
+export async function createNote(title: string, content: string, tag: string): Promise<Note> {
+    const response = await axios.post<Note>(
         'https://notehub-public.goit.study/api/notes',
         {
             title,
@@ -45,8 +43,8 @@ export async function createNote(title: string, content: string, tag: string): P
     return response.data;
 }
 
-export async function deleteNote(id: string): Promise<NoteResponse> {
-    const response = await axios.delete<NoteResponse>(
+export async function deleteNote(id: string): Promise<Note> {
+    const response = await axios.delete<Note>(
         `https://notehub-public.goit.study/api/notes/${id}`,
         {
             headers: {
